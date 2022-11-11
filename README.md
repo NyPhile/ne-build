@@ -28,6 +28,9 @@ $ npx @ne-web/ne-build h5 projectName
 # h5 zepto模板
 # 使用 NyPhile/h5_template 作为模板创建项目，等同于 npx ne-build init -t NyPhile/h5_template
 
+$ npx @ne-web/ne-build h5-scroll projectName
+# h5-scroll 边滑边动模板
+
 $ npx @ne-web/ne-build post projectName
 # node渲染项目前端模板（以文章页为例）
 

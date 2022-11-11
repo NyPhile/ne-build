@@ -185,6 +185,36 @@ program
     })
   })
 
+  program
+  .command('h5-scroll [projectName]')
+  .description('创建H5-边滑边动项目')
+  .option('-n, --projectName <input>', '项目名称')
+  .option('-c, --projectChannel <input>', '频道名称')
+  .option('-d, --projectDesc <input>', '项目描述')
+  .option('--username <input>', '上传账号')
+  .option('--password <input>', '上传密码')
+  .action((projectName, option) => {
+    let config = _.assign({
+      projectName: projectName ? projectName : null,
+      projectChannel: null,
+      projectDesc: null,
+      templatePath: 'direct:https://g.hz.netease.com/f2e/component/h5_template_scroller.git',
+      downloadOption: { clone: true,headers: { 'PRIVATE-TOKEN': '2cKz8z6nheEasAAGijQv' } },
+      username: null,
+      password: null
+    }, option)
+
+    console.log('')
+    console.log(chalk.magenta('准备创建项目'))
+    console.log('')
+
+    inquire(config).then(answers => {
+      answers = _.assign(config, answers)
+
+      downloadReopScroll(answers, projectName)
+    })
+  })
+
 program
   .command('post [projectName]')
   .description('创建文章页项目')
@@ -340,6 +370,8 @@ program
 
 program.parse(process.argv)
 
+var count = 0 //累计下载模板不成功次数，反复请求下载模板，不超过10次
+
 function inquire (param) {
   let prompts = []
 
@@ -423,7 +455,52 @@ function downloadReop (param, path) {
     }
   })
 }
+function downloadReopScroll (param, path) {
+  const projectPath = path ? `./${path}/` : './'
+  const spinner = ora('正在下载模板').start()
+  download(param.templatePath, projectPath, param.downloadOption, function (err) {
+    if (err) {
+      count++
+      if(count<10){
+        downloadPcMulti (param, path)
+      }else{
+        console.log(err)
+      }
+    } else {
+      let packageFile = {}
+      let packagePath = `${projectPath}package.json`
+      if (fs.existsSync(packagePath)) {
+        packageFile = JSON.parse(fs.readFileSync(packagePath, 'utf-8'))
+      }
+      packageFile.name = param.projectName
+      packageFile.channel = param.projectChannel
+      packageFile.description = param.projectDesc || ''
+      fs.writeFileSync(packagePath, JSON.stringify(packageFile, null, 2))
 
+      let ftppass = {}
+      let ftppassPath = `${projectPath}.ftppass`
+      if (fs.existsSync(ftppassPath)) {
+        ftppass = JSON.parse(fs.readFileSync(ftppassPath, 'utf-8'))
+      }
+      ftppass.username = param.username
+      ftppass.password = param.password
+      fs.writeFileSync(ftppassPath, JSON.stringify(ftppass, null, 2))
+
+      let readme = ''
+      let readmePath = `${projectPath}README.md`
+      if (fs.existsSync(readmePath)) {
+        readme = fs.readFileSync(readmePath, 'utf-8')
+      }
+      readme = readme.replace('# 项目标题', '# ' + param.projectName)
+      fs.writeFileSync(readmePath, readme)
+
+      console.log('')
+      console.log(chalk.magenta('完成'))
+      console.log('')
+      spinner.stop()
+    }
+  })
+}
 function downloadPc (param, path, isVue) {
   const projectPath = path ? `./${path}/` : './'
   const spinner = ora('正在下载模板').start()
@@ -509,7 +586,7 @@ function downloadComponent (param, path) {
     }
   })
 }
-var count = 0
+
 function downloadPcMulti (param, path) {
   const projectPath = path ? `./${path}/` : './'
   const spinner = ora('正在下载模板').start()

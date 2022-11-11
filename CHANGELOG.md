@@ -43,3 +43,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.15] - 2022-11-01
 ### 修改pc-jq-multi多页面模板下载路径，由github 改为gitlab
+
+## [0.0.16] - 2022-11-11
+### 添加H5边滑边动模板
