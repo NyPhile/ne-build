@@ -198,8 +198,7 @@ program
       projectName: projectName ? projectName : null,
       projectChannel: null,
       projectDesc: null,
-      templatePath: 'direct:https://g.hz.netease.com/f2e/component/h5_template_scroller.git',
-      downloadOption: { clone: true,headers: { 'PRIVATE-TOKEN': '2cKz8z6nheEasAAGijQv' } },
+      templatePath: 'zengxue158/h5-template-scroller',
       username: null,
       password: null
     }, option)
@@ -281,8 +280,6 @@ program
       projectChannel: null,
       projectDesc: null,
       templatePath:'zengxue158/pc-jq-template2',
-      // templatePath: 'direct:https://g.hz.netease.com/f2e/component/pc-jq-template2.git',
-      // downloadOption: { clone: true,headers: { 'PRIVATE-TOKEN': 'rWiKyfN5h87usVc-hZsG' } }
     }, option)
 
     console.log('')
@@ -459,7 +456,7 @@ function downloadReop (param, path) {
 function downloadReopScroll (param, path) {
   const projectPath = path ? `./${path}/` : './'
   const spinner = ora('正在下载模板').start()
-  download(param.templatePath, projectPath, param.downloadOption, function (err) {
+  download(param.templatePath, projectPath,function (err) {
     if (err) {
       count++
       if(count<10){
@@ -591,7 +588,7 @@ function downloadComponent (param, path) {
 function downloadPcMulti (param, path) {
   const projectPath = path ? `./${path}/` : './'
   const spinner = ora('正在下载模板').start()
-  download(param.templatePath, projectPath, param.downloadOption, function (err) {
+  download(param.templatePath, projectPath,function (err) {
     if (err) {
       count++
       if(count<10){
