@@ -280,8 +280,9 @@ program
       projectName: projectName ? projectName : null,
       projectChannel: null,
       projectDesc: null,
-      templatePath: 'direct:https://g.hz.netease.com/f2e/component/pc-jq-template2.git',
-      downloadOption: { clone: true,headers: { 'PRIVATE-TOKEN': 'rWiKyfN5h87usVc-hZsG' } }
+      templatePath:'zengxue158/pc-jq-template2',
+      // templatePath: 'direct:https://g.hz.netease.com/f2e/component/pc-jq-template2.git',
+      // downloadOption: { clone: true,headers: { 'PRIVATE-TOKEN': 'rWiKyfN5h87usVc-hZsG' } }
     }, option)
 
     console.log('')
